@@ -1,0 +1,41 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1709839100713,
+      "tag": "0000_right_flatman",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1709839530710,
+      "tag": "0001_amused_roland_deschain",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1709840722728,
+      "tag": "0002_early_bruce_banner",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1709847254246,
+      "tag": "0003_chunky_lake",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1709847331141,
+      "tag": "0004_ambiguous_ego",
+      "breakpoints": true
+    }
+  ]
+}

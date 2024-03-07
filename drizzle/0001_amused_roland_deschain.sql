@@ -1,0 +1,1 @@
+ALTER TABLE "cards" ALTER COLUMN "ccv" SET DATA TYPE text;
