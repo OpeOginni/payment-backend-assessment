@@ -6,6 +6,7 @@
 - Typescript
 - Postgres
 - DrizzleORM
+- Docker
 
 ## Features
 
@@ -15,7 +16,7 @@
 - [x] **Database Integration**: Postgres Database with Drizzle used as a typesafe ORM.
 - [x] **Security Measures**: Sensitive data like User Passwords and Card CCV are hashed before storage.
 - [x] **Logging**: Implemented Logging for Payment Transaction Actions.
-- [] **Testing**: Unit tests for Payment Processing Logic.
+- [x] **Testing**: Implementation tests for Payment Processing Logic.
 - [x] **Tokenization Implementation**: Implemented middlewares that tokenize cards details before being used for payment logic.
 
 ## Local Setup
@@ -50,4 +51,12 @@ Use the `docker-compose.yml` to spin up a local postgresDB or use your personal 
 
 ```bash
  npm run dev
+```
+
+## Test Command
+
+### Run Test
+
+```bash
+ npm run test
 ```

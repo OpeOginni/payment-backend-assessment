@@ -1,8 +1,7 @@
-import { varchar, text, pgTable, uuid, integer, timestamp, pgEnum } from "drizzle-orm/pg-core";
+import { text, pgTable, uuid, integer, timestamp, pgEnum } from "drizzle-orm/pg-core";
 import { relations } from 'drizzle-orm';
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from 'zod';
-import { TransactionStatusEnum } from "../types/enums";
 
 export const users = pgTable('users', {
     id: uuid('id').defaultRandom().unique().primaryKey(),
@@ -91,6 +90,7 @@ export const transactions = pgTable('transactions', {
     timestamp: timestamp('timestamp').notNull().defaultNow(),
 });
 
+// create relation between transactions and cards and wallets
 export const transactionRelations = relations(transactions, ({ one }) => ({
     card: one(cards, {
         fields: [transactions.cardId],
@@ -120,7 +120,7 @@ export const cardTokensRelations = relations(cardTokens, ({ one }) => ({
     })
 }))
 
-export const insertCardTokensSchema = createInsertSchema(cardTokens);
+export const insertCardTokensSchema = createInsertSchema(cardTokens); // create a schema for inserting a card token
 
 export type CardToken = typeof cardTokens.$inferSelect;
 

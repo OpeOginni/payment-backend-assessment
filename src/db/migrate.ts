@@ -18,7 +18,6 @@ async function main() {
 
     console.log("MIGRATION COMPLETED")
 
-    // Don't forget to close the connection, otherwise the script will hang
     await migrationClient.end();
 }
 

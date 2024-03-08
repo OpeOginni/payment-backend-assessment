@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 
 
 import errorHandler from "../lib/errorHandler";
-import { createPaymentSchema, insertTransactonSchema, queryTransactionSchema, updateTransactionSchema } from "../types/transaction.types";
-import { TransactionStatusEnum, TransactionTypeEnum } from "../types/enums";
+import { createPaymentSchema, queryTransactionSchema, updateTransactionSchema } from "../types/transaction.types";
+import { TransactionStatusEnum } from "../types/enums";
 import { deleteTransactionService, getTransactionService, paymentTransactionService, updateTransactionService } from "../services/transaction.service";
 import { failedTransactionLogger, sentTransactionLogger, successfulTransactionLogger } from "../lib/logger";
 
@@ -29,7 +29,6 @@ export async function getTransaction(req: Request, res: Response) {
         // validation
         const dto = queryTransactionSchema.parse(req.params)
 
-
         const transaction = await getTransactionService(dto)
 
         return res.status(200).json({ success: true, transaction })
@@ -46,6 +45,7 @@ export async function updateTransaction(req: Request, res: Response) {
 
         const updatedTransaction = await updateTransactionService(dto)
 
+        // logging depending on the status of the updated transaction
         if (dto.transactionStatus === TransactionStatusEnum.SUCCESSFUL) successfulTransactionLogger.info(`Transaction Successful - ID: ${dto.transactionId}, Amount: ${updatedTransaction?.amount}, Status: ${dto.transactionStatus}`);
 
         if (dto.transactionStatus === TransactionStatusEnum.FAILED) failedTransactionLogger.error(`Transaction Failed - ID: ${dto.transactionId}, Amount: ${updatedTransaction?.amount}, Status: ${dto.transactionStatus}`);

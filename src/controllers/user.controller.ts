@@ -38,12 +38,13 @@ export async function createCard(req: Request, res: Response) {
 
         const ownerId = req.params.id
         const walletId = req.params.id
+
+        // generating random card details
         const cardNumber = generateCardNumber()
         const ccv = generateCCV()
         const expiryMonth = generateExpiryMonth()
         const expiryYear = generateExpiryYear()
 
-        console.log(`CARD NUMBER: ${cardNumber}`)
         console.log(`CCV: ${ccv}`)
 
         // validation

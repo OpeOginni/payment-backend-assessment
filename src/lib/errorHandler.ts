@@ -5,8 +5,10 @@ import CustomError from './customError';
 import { ErrorTitleEnum } from '../types/enums';
 import { failedTransactionLogger } from './logger';
 
+// This is a custom error handler function to handle all errors in the app
 export default function errorHandler(err: Error, req: Request, res: Response, next?: NextFunction) {
     if (err instanceof ZodError) {
+        // Handles all Zod Validation Error
         const errors = err.errors.map(error => ({
             param: error.path[0],
             message: error.message
@@ -15,6 +17,7 @@ export default function errorHandler(err: Error, req: Request, res: Response, ne
     }
 
     if (err instanceof postgres.PostgresError) {
+        // Handles all Postgres Errors
 
         if (err.code === '23505') return res.status(409).json({ error: "Duplicate Error", message: err.message, detail: err.detail })
 
@@ -22,10 +25,10 @@ export default function errorHandler(err: Error, req: Request, res: Response, ne
     }
 
     if (err instanceof CustomError) {
-
+        // Handles all our Custom Errors
         if (err.title === ErrorTitleEnum.TRANSACTION_ERROR) {
 
-            // This gets all extra details of a failed transaction to be logged too
+            // This gets all extra details of a failed transaction to be logged too IF they exist
             let detailsLog = '';
             if (err.details) {
                 for (const [key, value] of Object.entries(err.details)) {

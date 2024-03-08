@@ -17,7 +17,6 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // ROUTES
-
 app.use("/api/health-check", healthCheckRouter)
 app.use("/api/user", userRouter)
 app.use("/api/transaction", transactionRouter)

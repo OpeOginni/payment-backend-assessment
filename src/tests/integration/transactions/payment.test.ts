@@ -16,6 +16,7 @@ describe('POST /api/payment', () => {
     let card: Card;
     let cardCCV: string
 
+    // This is to SEED the DB with a user, wallet and card to use for the tests
     beforeAll(async () => {
         // Sign up a user
         const userResponse = await request(app).post('/api/user').send({
@@ -137,6 +138,7 @@ describe('POST /api/payment', () => {
 
     })
 
+    // Authentication Tests
     describe("when the passed card details are wrong", () => {
 
         test("should respond with a 401 status code and send Transaction Error", async () => {
@@ -196,8 +198,7 @@ describe('POST /api/payment', () => {
 
     })
 
-    // Rate Limit
-
+    // Rate Limit Test
     describe("when endpoint is called more than 20 times", () => {
 
         test("should respond with a 429 status code and send Too Many Calls", async () => {
@@ -235,6 +236,5 @@ describe('POST /api/payment', () => {
 
         await queryClient.end()
         console.log("CLEARED DB")
-
     });
 });

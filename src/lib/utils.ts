@@ -1,3 +1,4 @@
+// util function to generate a random 16 digit card number
 export const generateCardNumber = (): string => {
     let cardNumber = "";
     for (let i = 0; i < 16; i++) {
@@ -6,6 +7,7 @@ export const generateCardNumber = (): string => {
     return cardNumber;
 }
 
+// util function to generate a random 3 digit ccv number
 export const generateCCV = (): string => {
     let ccv = "";
     for (let i = 0; i < 3; i++) {
