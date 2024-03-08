@@ -6,6 +6,7 @@ import { db } from "../db/db";
 import { CreateCardDto, CreateWalletDto, GetUserCardsDto } from "../types/user.types";
 import { hashSecret } from "../lib/auth";
 import CustomError from '../lib/customError';
+import { ErrorTitleEnum } from '../types/enums';
 
 export async function createUserService(dto: NewUser): Promise<User[]> {
 
@@ -22,7 +23,7 @@ export async function createWalletService(dto: CreateWalletDto): Promise<Wallet[
         where: eq(users.id, dto.id)
     })
 
-    if (!user) throw new CustomError("UserID Doesnt Exsit", 401)
+    if (!user) throw new CustomError(ErrorTitleEnum.WALLET_ERROR, "UserID Doesnt Exsit", 401)
 
     const newWallet = await db.insert(wallets).values(dto).returning()
 
@@ -35,7 +36,7 @@ export async function createCardService(dto: NewCard): Promise<Card[]> {
         where: eq(users.id, dto.ownerId)
     })
 
-    if (!user) throw new CustomError("UserID Doesnt Exist", 401)
+    if (!user) throw new CustomError(ErrorTitleEnum.CARD_ERROR, "UserID Doesnt Exist", 401)
 
     dto.ccv = await hashSecret(dto.ccv)
 
@@ -53,7 +54,7 @@ export async function getUserCardsService(dto: GetUserCardsDto): Promise<Card[]>
         }
     })
 
-    if (!user) throw new CustomError("UserID Doesnt Exist", 401)
+    if (!user) throw new CustomError(ErrorTitleEnum.CARD_ERROR, "UserID Doesnt Exist", 401)
 
     return user.cards
 }

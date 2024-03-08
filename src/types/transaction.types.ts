@@ -23,6 +23,8 @@ export const insertTransactonSchema = z
         cardId: z.string().uuid(),
         amount: z.number().positive(),
         walletId: z.string().uuid(),
+        transactionStatus: z.enum(['SUCCESSFUL', 'PENDING', 'FAILED']),
+        transactionType: z.enum(['DEPOSIT', 'WITHDRAWAL'])
     })
 export const queryTransactionSchema = z
     .object({

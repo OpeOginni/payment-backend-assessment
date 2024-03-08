@@ -8,6 +8,7 @@ import { compareSecret, generateToken, hashSecret } from '../lib/auth';
 import CustomError from '../lib/customError';
 import { createCardTokenSchema, createPaymentSchema } from '../types/transaction.types';
 import errorHandler from '../lib/errorHandler';
+import { ErrorTitleEnum } from '../types/enums';
 
 
 export const limiter = rateLimit({
@@ -31,17 +32,17 @@ export async function cardVerification(req: Request, res: Response, next: NextFu
             }
         })
 
-        if (!card) throw new CustomError("Card Doesnt Exist", 401)
+        if (!card) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Card Doesnt Exist", 401, { amount: dto.amount })
 
-        if (!await compareSecret(dto.ccv, card.ccv)) throw new CustomError("Incorrect Card Details", 401)
+        if (!await compareSecret(dto.ccv, card.ccv)) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Incorrect Card Details", 401, { amount: dto.amount, cardId: card.id })
 
-        if (card.expiryMonth != dto.expiryMonth) throw new CustomError("Incorrect Card Details", 401)
+        if (card.expiryMonth != dto.expiryMonth) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Incorrect Card Details", 401, { amount: dto.amount, cardId: card.id })
 
-        if (card.expiryYear != dto.expiryYear) throw new CustomError("Incorrect Card Details", 401)
+        if (card.expiryYear != dto.expiryYear) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Incorrect Card Details", 401, { amount: dto.amount, cardId: card.id })
 
-        if (card.expiryYear < new Date().getFullYear()) throw new CustomError("Card Is Expired", 401)
+        if (card.expiryYear < new Date().getFullYear()) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Card Is Expired", 401, { amount: dto.amount, cardId: card.id })
 
-        if (card.expiryYear == new Date().getFullYear() && card.expiryMonth <= (new Date().getMonth() + 1)) throw new CustomError("Card Is Expired", 401)
+        if (card.expiryYear == new Date().getFullYear() && card.expiryMonth <= (new Date().getMonth() + 1)) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Card Is Expired", 401, { amount: dto.amount, cardId: card.id })
 
         res.locals.cardId = card.id
 
@@ -65,7 +66,7 @@ export async function tokenizeCardDetails(req: Request, res: Response, next: Nex
 
         const cardToken = await db.insert(cardTokens).values(dto).returning()
 
-        if (!cardToken[0]) throw new CustomError("Error in Transaction", 500)
+        if (!cardToken[0]) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Error in Transaction", 500, { token: dto.token, cardId: dto.cardId })
 
         req.body = { token: cardToken[0].token, amount: paymentDetails.amount }
 

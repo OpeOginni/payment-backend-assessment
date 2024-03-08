@@ -36,6 +36,13 @@
       "when": 1709847331141,
       "tag": "0004_ambiguous_ego",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1709916439435,
+      "tag": "0005_blue_maggott",
+      "breakpoints": true
     }
   ]
 }

@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import postgres from 'postgres';
 import { ZodError } from 'zod';
 import CustomError from './customError';
+import { ErrorTitleEnum } from '../types/enums';
+import { failedTransactionLogger } from './logger';
 
 export default function errorHandler(err: Error, req: Request, res: Response, next?: NextFunction) {
     if (err instanceof ZodError) {
@@ -21,8 +23,20 @@ export default function errorHandler(err: Error, req: Request, res: Response, ne
 
     if (err instanceof CustomError) {
 
+        if (err.title === ErrorTitleEnum.TRANSACTION_ERROR) {
 
-        return res.status(err.code).json({ error: "Custom Error", message: err.message });
+            // This gets all extra details of a failed transaction to be logged too
+            let detailsLog = '';
+            if (err.details) {
+                for (const [key, value] of Object.entries(err.details)) {
+                    detailsLog += `${key.toLocaleUpperCase()}: ${value}, `;
+                }
+            }
+
+            failedTransactionLogger.error(`Payment failed - ${detailsLog}Error: ${err.message}`)
+        }
+
+        return res.status(err.code).json({ error: err.title, message: err.message, });
     }
     res.status(500).json({ message: "Internal server error" });
 }

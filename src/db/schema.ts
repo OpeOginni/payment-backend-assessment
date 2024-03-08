@@ -29,7 +29,7 @@ export const userRelations = relations(users, ({ one, many }) => ({
 
 export const wallets = pgTable('wallets', {
     id: uuid('id').unique().primaryKey(),
-    amount: integer('amount').default(0),
+    amount: integer('amount').default(0).notNull(),
     createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 
@@ -86,8 +86,8 @@ export const transactions = pgTable('transactions', {
     cardId: uuid('card_id').notNull(),
     amount: integer('amount').notNull(),
     walletId: uuid('wallet_id').notNull(),
-    transactionType: text('transaction_type', { enum: ['DEPOSIT', 'WITHDRAWAL'] }),
-    transactionStatus: text('transaction_status', { enum: ['SUCCESSFUL', 'PENDING', 'FAILED'] }).default(TransactionStatusEnum.PENDING),
+    transactionType: text('transaction_type', { enum: ['DEPOSIT', 'WITHDRAWAL'] }).notNull(),
+    transactionStatus: text('transaction_status', { enum: ['SUCCESSFUL', 'PENDING', 'FAILED'] }).notNull(),
     timestamp: timestamp('timestamp').notNull().defaultNow(),
 });
 

@@ -39,6 +39,7 @@
     "express-rate-limit": "^7.2.0",
     "pg": "^8.11.3",
     "postgres": "^3.4.3",
-    "tsup": "^8.0.2"
+    "tsup": "^8.0.2",
+    "winston": "^3.12.0"
   }
 }
