@@ -13,7 +13,7 @@ import { ErrorTitleEnum } from '../types/enums';
 
 export const limiter = rateLimit({
     windowMs: 60 * 1000, // 1 minute
-    limit: 5, // 5 requests per minute
+    limit: 20, // 5 requests per minute
     standardHeaders: 'draft-7',
     legacyHeaders: false,
     message: "Too many Calls, please ty again later",
@@ -32,15 +32,15 @@ export async function cardVerification(req: Request, res: Response, next: NextFu
             }
         })
 
-        if (!card) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Card Doesnt Exist", 401, { amount: dto.amount })
+        if (!card) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Card Doesnt Exist", 404, { amount: dto.amount })
 
-        if (!await compareSecret(dto.ccv, card.ccv)) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Incorrect Card Details", 401, { amount: dto.amount, cardId: card.id })
+        if (!await compareSecret(dto.ccv, card.ccv)) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Incorrect Card Details", 400, { amount: dto.amount, cardId: card.id })
 
-        if (card.expiryMonth != dto.expiryMonth) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Incorrect Card Details", 401, { amount: dto.amount, cardId: card.id })
+        if (card.expiryMonth != dto.expiryMonth) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Incorrect Card Details", 400, { amount: dto.amount, cardId: card.id })
 
-        if (card.expiryYear != dto.expiryYear) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Incorrect Card Details", 401, { amount: dto.amount, cardId: card.id })
+        if (card.expiryYear != dto.expiryYear) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Incorrect Card Details", 400, { amount: dto.amount, cardId: card.id })
 
-        if (card.expiryYear < new Date().getFullYear()) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Card Is Expired", 401, { amount: dto.amount, cardId: card.id })
+        if (card.expiryYear < new Date().getFullYear()) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Card Is Expired", 400, { amount: dto.amount, cardId: card.id })
 
         if (card.expiryYear == new Date().getFullYear() && card.expiryMonth <= (new Date().getMonth() + 1)) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Card Is Expired", 401, { amount: dto.amount, cardId: card.id })
 

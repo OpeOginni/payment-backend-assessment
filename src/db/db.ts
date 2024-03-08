@@ -16,7 +16,7 @@ const db_port = Number(process.env.DB_PORT as string);
 
 // const queryClient = postgres(connectionString);
 
-const queryClient = postgres({
+export const queryClient = postgres({
     user: db_user,
     password: db_password,
     host: db_host,

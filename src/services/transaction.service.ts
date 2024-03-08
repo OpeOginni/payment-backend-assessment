@@ -32,7 +32,7 @@ export async function paymentTransactionService(dto: CreatePaymentDto): Promise<
     if (!card) throw new CustomError(ErrorTitleEnum.TRANSACTION_ERROR, "Card doesnt Exist", 401, { amount: dto.amount })
 
 
-    if (card.wallet.amount < dto.amount) {
+    if (card.wallet.balance < dto.amount) {
 
         const transactionStatus = TransactionStatusEnum.FAILED
 
@@ -63,7 +63,7 @@ export async function paymentTransactionService(dto: CreatePaymentDto): Promise<
 
     await db.update(wallets)
         .set({
-            amount: decrement(wallets.amount, dto.amount)
+            balance: decrement(wallets.balance, dto.amount)
         })
 
     return transaction[0]

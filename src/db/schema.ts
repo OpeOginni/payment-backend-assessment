@@ -29,7 +29,7 @@ export const userRelations = relations(users, ({ one, many }) => ({
 
 export const wallets = pgTable('wallets', {
     id: uuid('id').unique().primaryKey(),
-    amount: integer('amount').default(0).notNull(),
+    balance: integer('amount').default(10).notNull(), // Gave the wallet a default of 10 for testing purposes
     createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 

@@ -58,3 +58,17 @@ export async function getUserCardsService(dto: GetUserCardsDto): Promise<Card[]>
 
     return user.cards
 }
+
+export async function getUserWalletService(dto: GetUserCardsDto): Promise<Wallet | null> {
+
+    const user = await db.query.users.findFirst({
+        where: eq(users.id, dto.id),
+        with: {
+            wallet: true
+        }
+    })
+
+    if (!user) throw new CustomError(ErrorTitleEnum.CARD_ERROR, "UserID Doesnt Exist", 401)
+
+    return user.wallet
+}

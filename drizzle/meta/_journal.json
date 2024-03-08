@@ -43,6 +43,13 @@
       "when": 1709916439435,
       "tag": "0005_blue_maggott",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1709932991443,
+      "tag": "0006_fine_the_fury",
+      "breakpoints": true
     }
   ]
 }

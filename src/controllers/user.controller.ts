@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 
-import { createCardService, createUserService, createWalletService, getUserCardsService } from "../services/user.service";
+import { createCardService, createUserService, createWalletService, getUserCardsService, getUserWalletService } from "../services/user.service";
 import { insertCardsSchema, insertUserSchema, insertWalletSchema } from "../db/schema";
 import { generateCCV, generateCardNumber, generateExpiryMonth, generateExpiryYear } from "../lib/utils";
 import errorHandler from "../lib/errorHandler";
-import { getUserCardsSchema } from "../types/user.types";
+import { getUserCardsSchema, getUserWalletSchema } from "../types/user.types";
 
 
 export async function createUser(req: Request, res: Response) {
@@ -74,6 +74,20 @@ export async function getUserCards(req: Request, res: Response) {
         const cards = await getUserCardsService(dto)
 
         return res.status(200).json({ success: true, userId: dto.id, cards })
+
+    } catch (err: any) {
+        return errorHandler(err, req, res)
+    }
+}
+
+export async function getUserWallet(req: Request, res: Response) {
+    try {
+
+        const dto = getUserWalletSchema.parse(req.params)
+
+        const wallet = await getUserWalletService(dto)
+
+        return res.status(200).json({ success: true, userId: dto.id, wallet })
 
     } catch (err: any) {
         return errorHandler(err, req, res)
