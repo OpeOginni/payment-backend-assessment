@@ -44,7 +44,7 @@ Use the `docker-compose.yml` to spin up a local postgresDB or use your personal 
 ### Push Schema
 
 ```bash
- npm run db:push
+ npm run db:migrate
 ```
 
 ### Run Dev Server
