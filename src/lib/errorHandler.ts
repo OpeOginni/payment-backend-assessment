@@ -38,5 +38,5 @@ export default function errorHandler(err: Error, req: Request, res: Response, ne
 
         return res.status(err.code).json({ error: err.title, message: err.message, });
     }
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error", detail: err.message });
 }
