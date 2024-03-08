@@ -1,9 +1,8 @@
-import request, { Response } from 'supertest';
+import request from 'supertest';
 import { describe, expect, test } from '@jest/globals';
 
 import app from '../../../app';
 import { db, queryClient } from '../../../db/db';
-import { paymentTransactionService } from '../../../services/transaction.service';
 import { Card, User, Wallet, cardTokens, cards, transactions, users, wallets } from '../../../db/schema';
 import { ErrorTitleEnum } from '../../../types/enums';
 
@@ -238,3 +237,7 @@ describe('POST /api/payment', () => {
         console.log("CLEARED DB")
     });
 });
+
+// I couldn't integrate the Unit Testing of the PaymentService because of its dependence on the tokenizeCardDetails middleware.
+
+// But the Integration Test Handles it Properly.
