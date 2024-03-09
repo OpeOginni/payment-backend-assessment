@@ -24,9 +24,5 @@ export const queryClient = postgres({
     database: db_name
 })
 
+// creating the db connection instance to use throughout the app
 export const db = drizzle(queryClient, { schema });
-
-// (async () => {
-//     await migrate(db, { migrationsFolder: "drizzle" });
-//     await sql.end();
-// })();

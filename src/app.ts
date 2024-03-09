@@ -21,6 +21,10 @@ app.use("/api/health-check", healthCheckRouter)
 app.use("/api/user", userRouter)
 app.use("/api/transaction", transactionRouter)
 
+// The payment route with the middlewares for;
+// 1. Rate Limiting
+// 2. Card Verification to check if the card is valid and if the details passed (ccv, expirt date) are correct to that card
+// 3. Tokenize the card details to get a token that will be used to make the payment
 app.post("/api/payment", limiter, cardVerification, tokenizeCardDetails, paymentTransaction)
 
 

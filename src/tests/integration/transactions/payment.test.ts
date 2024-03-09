@@ -3,10 +3,15 @@ import { describe, expect, test } from '@jest/globals';
 
 import app from '../../../app';
 import { db, queryClient } from '../../../db/db';
-import { Card, User, Wallet, cardTokens, cards, transactions, users, wallets } from '../../../db/schema';
+import { cardTokens, cards, transactions, users, wallets } from '../../../db/schema';
+import { User, Wallet, Card } from "../../../db/types"
 import { ErrorTitleEnum } from '../../../types/enums';
 
+// I  made use of an actual postgres DB for testing because thats the best way to run tests when using DrizzleORM
+// Mianly capability for Mock Databse Testing isnt really available as for Prisma
 
+// So my solution is to create a temporary test DB using Docker to just run the tests and then delete the DB after the tests are done.
+// This aproach even helps to make sure that the integration will work when moving to an actual DB
 
 describe('POST /api/payment', () => {
 
@@ -15,7 +20,7 @@ describe('POST /api/payment', () => {
     let card: Card;
     let cardCCV: string
 
-    // This is to SEED the DB with a user, wallet and card to use for the tests
+    // This is Run before all Payment Tests to SEED the DB with a user, wallet and card to use
     beforeAll(async () => {
         // Sign up a user
         const userResponse = await request(app).post('/api/user').send({
@@ -233,7 +238,7 @@ describe('POST /api/payment', () => {
         await db.delete(transactions)
         await db.delete(cardTokens)
 
-        await queryClient.end()
+        await queryClient.end() // Close Connection to DB
         console.log("CLEARED DB")
     });
 });

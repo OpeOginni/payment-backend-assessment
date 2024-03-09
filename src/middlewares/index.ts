@@ -3,7 +3,8 @@ import { db } from "../db/db";
 
 import { rateLimit } from 'express-rate-limit'
 import { eq, } from 'drizzle-orm';
-import { cardTokens, cards, insertCardTokensSchema, } from "../db/schema";
+import { cardTokens, cards} from "../db/schema";
+import {insertCardTokensSchema} from "../db/types"
 import { compareSecret, generateToken } from '../lib/auth';
 import CustomError from '../lib/customError';
 import { createCardTokenSchema } from '../types/transaction.types';

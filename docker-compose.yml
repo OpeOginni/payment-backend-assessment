@@ -23,3 +23,5 @@ networks:
 volumes:
   db:
     driver: local
+# This Docker Compose file runs the db seruce, which can be use for actual API calls testing, and also the integration tests.
+# Make sure to have Docker Installed and Running before composing or testing

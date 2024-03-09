@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import { createCardService, createUserService, createWalletService, getUserCardsService, getUserWalletService } from "../services/user.service";
-import { insertCardsSchema, insertUserSchema, insertWalletSchema } from "../db/schema";
+import { insertCardsSchema, insertUserSchema, insertWalletSchema } from "../db/types";
 import { generateCCV, generateCardNumber, generateExpiryMonth, generateExpiryYear } from "../lib/utils";
 import errorHandler from "../lib/errorHandler";
 import { getUserCardsSchema, getUserWalletSchema } from "../types/user.types";

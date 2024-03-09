@@ -1,12 +1,14 @@
 import { eq, AnyColumn, sql } from 'drizzle-orm';
 
 import { db } from "../db/db";
-import { Transaction, cardTokens, cards, transactions, wallets } from "../db/schema";
+import {  cardTokens, cards, transactions, wallets } from "../db/schema";
+import {Transaction} from "../db/types"
 import CustomError from '../lib/customError';
 import { CreatePaymentDto, QueryTransactionDto, UpdateTransactionDto, insertTransactonSchema } from '../types/transaction.types';
-import { compareSecret, hashSecret } from '../lib/auth';
 import { ErrorTitleEnum, TransactionStatusEnum, TransactionTypeEnum } from '../types/enums';
 
+// created a decrement function to help with updating the wallet balance
+// makes use of the sql template string, nice feature of drizzle-orm
 const decrement = (column: AnyColumn, value = 1) => {
     return sql`${column} - ${value}`;
 };
@@ -61,6 +63,7 @@ export async function paymentTransactionService(dto: CreatePaymentDto): Promise<
 
     const transaction = await db.insert(transactions).values(finalDto).returning()
 
+    // Update the Wallet balance after a successful transaction
     await db.update(wallets)
         .set({
             balance: decrement(wallets.balance, dto.amount)

@@ -1,9 +1,9 @@
 import { eq, } from 'drizzle-orm';
 
-import { Card, NewCard, Wallet, cards, wallets } from "../db/schema";
-import { NewUser, users, User } from "../db/schema";
+import { users, cards, wallets, } from "../db/schema";
+import { NewUser, User, Card, NewCard, Wallet } from "../db/types"
 import { db } from "../db/db";
-import { CreateCardDto, CreateWalletDto, GetUserCardsDto } from "../types/user.types";
+import { CreateWalletDto, GetUserCardsDto } from "../types/user.types";
 import { hashSecret } from "../lib/auth";
 import CustomError from '../lib/customError';
 import { ErrorTitleEnum } from '../types/enums';

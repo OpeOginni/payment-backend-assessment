@@ -12,7 +12,7 @@
 
 - [x] **Endpoints**: All endpoints are documented [here](https://documenter.getpostman.com/view/24109379/2sA2xh2Cg7)
 - [x] **Input Validation**: Validation taken care by the `Zod` library.
-- [x] **Error Handling**: Complete Error Handling throughout the server.
+- [x] **Error Handling**: Complete Error Handling throughout the server endpoints, using an error Handler function.
 - [x] **Database Integration**: Postgres Database with Drizzle used as a typesafe ORM.
 - [x] **Security Measures**: Sensitive data like User Passwords and Card CCV are hashed before storage.
 - [x] **Logging**: Implemented Logging for Payment Transaction Actions.
@@ -53,10 +53,12 @@ Use the `docker-compose.yml` to spin up a local postgresDB or use your personal 
  npm run dev
 ```
 
-## Test Command
-
-### Run Test
+## Run Test
 
 ```bash
  npm run test
 ```
+
+> Note to have your Docker Daemon Running before running the test command.
+
+> If you are making use of the current docker-compose file for testing, make sure that your `.env` vars are the same as the one in `.env.example`

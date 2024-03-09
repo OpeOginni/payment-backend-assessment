@@ -3,6 +3,7 @@ import { relations } from 'drizzle-orm';
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from 'zod';
 
+// User Table Schema
 export const users = pgTable('users', {
     id: uuid('id').defaultRandom().unique().primaryKey(),
     email: text('email').unique().notNull(),
@@ -11,21 +12,13 @@ export const users = pgTable('users', {
     createdAt: timestamp('created_at').defaultNow()
 });
 
-export type NewUser = typeof users.$inferInsert;
-
-export const insertUserSchema = createInsertSchema(users, {
-    email: (schema) => schema.email.email(),
-    phoneNumber: z.string(),
-    password: z.string().min(6),
-});
-
-export type User = typeof users.$inferSelect; // return type when queried
-
+// Creating User Relations, where Each user has ONE wallet and MANY cards
 export const userRelations = relations(users, ({ one, many }) => ({
     wallet: one(wallets),
     cards: many(cards)
 }));
 
+// Wallet Table Schema
 export const wallets = pgTable('wallets', {
     id: uuid('id').unique().primaryKey(),
     balance: integer('amount').default(10).notNull(), // Gave the wallet a default of 10 for testing purposes
@@ -40,16 +33,11 @@ export const walletRelations = relations(wallets, ({ one, many }) => ({
     })
 }));
 
-export const insertWalletSchema = createInsertSchema(wallets, {
-    id: (schema) => schema.id.uuid()
-});
-
-export type Wallet = typeof wallets.$inferSelect;
-
+// Card Table Schema
 export const cards = pgTable('cards', {
     id: uuid('id').defaultRandom().unique().primaryKey(),
     cardNumber: text('card_number').unique().notNull(),
-    ccv: text('ccv',).notNull(), // Would have used a limited lenght varchar but I am hashing
+    ccv: text('ccv',).notNull(), // Would have used a limited lenght varchar but I am hashing the ccv so I give it a text data type
     expiryMonth: integer('expiry_month').notNull(),
     expiryYear: integer('expiry_year').notNull(),
     walletId: uuid('wallet_id').notNull(),
@@ -68,18 +56,7 @@ export const cardRelations = relations(cards, ({ one }) => ({
     })
 }));
 
-export const insertCardsSchema = createInsertSchema(cards, {
-    cardNumber: z.string().length(16),
-    ccv: z.string().length(3),
-    expiryMonth: z.number().min(1).max(12),
-    expiryYear: z.number().min(2023),
-});
-
-export type Card = typeof cards.$inferSelect;
-
-export type NewCard = typeof cards.$inferInsert;
-
-
+// Transactions Table Schema
 export const transactions = pgTable('transactions', {
     id: uuid('id').defaultRandom().unique().primaryKey(),
     cardId: uuid('card_id').notNull(),
@@ -90,7 +67,6 @@ export const transactions = pgTable('transactions', {
     timestamp: timestamp('timestamp').notNull().defaultNow(),
 });
 
-// create relation between transactions and cards and wallets
 export const transactionRelations = relations(transactions, ({ one }) => ({
     card: one(cards, {
         fields: [transactions.cardId],
@@ -102,10 +78,7 @@ export const transactionRelations = relations(transactions, ({ one }) => ({
     })
 }));
 
-export type Transaction = typeof transactions.$inferSelect;
-
-export type NewTransaction = typeof transactions.$inferInsert;
-
+// Card Tokens Table Schema
 export const cardTokens = pgTable('card_tokens', {
     id: uuid('id').defaultRandom().unique().primaryKey(),
     cardId: uuid('card_id').notNull(),
@@ -120,8 +93,4 @@ export const cardTokensRelations = relations(cardTokens, ({ one }) => ({
     })
 }))
 
-export const insertCardTokensSchema = createInsertSchema(cardTokens); // create a schema for inserting a card token
-
-export type CardToken = typeof cardTokens.$inferSelect;
-
-export type NewCardToken = typeof cardTokens.$inferInsert;
+// Sperated Types and Validation Schema from the Schema.ts file to make it less congested
